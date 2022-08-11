@@ -21,4 +21,5 @@ public class UserDefinitionKey implements Serializable {
 
     @Column(name = "usr_dfntn_wrk_ara_nm")
     private String userDefinitionWorkAreaName;
+
 }
