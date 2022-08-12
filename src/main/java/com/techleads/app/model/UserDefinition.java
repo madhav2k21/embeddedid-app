@@ -38,7 +38,7 @@ public class UserDefinition implements Serializable {
     @Column(name = "usr_dfntn_crte_usr_id")
     private String userDefinitionCreatedUserId;
 
-    @Column(name = "usr_dfntn_crte_tmsatmp")
+    @Column(name = "usr_dfntn_crte_ts")
     private LocalDateTime userDefinitionCreatedTs;
 
     @Column(name = "usr_dfntn_updt_usr_id")

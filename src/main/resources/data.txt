@@ -1,0 +1,30 @@
+INSERT INTO usr_dfntn(
+usr_dfntn_id, usr_dfntn_wrk_ara_nm, usr_dfntn_dn_id, usr_dfntn_frst_nm, usr_dfntn_lst_nm, usr_dfntn_ttl_nm, usr_dfntn_crte_usr_id, usr_dfntn_crte_tmsatmp, usr_dfntn_updt_usr_id, usr_dfntn_updt_ts)
+VALUES ('NMM561', 'DCC', 'CN=Brady\, Trish,OU=Nissan Users,OU=US-Users,OU=USA,OU=NNA,DC=NMCorp,DC=Nissan,DC=Biz', 'TRISH', 'BRADY', 'MGR SUPPLY CHAIN MGMT', 'NMM561', current_timestamp, 'NMM561', current_timestamp);
+
+ALTER TABLE USR_DSTBTN
+	ADD CONSTRAINT USR_DSTBTN_AK1 UNIQUE (USR_DFNTN_ID,USR_DFNTN_WRK_ARA_NM,USR_DSTBTN_FCLTY_ID,USR_DSTBTN_FMLY_CD,USR_DSTBTN_PRT_FMLY_CD,
+	USR_DSTBTN_SPLR_NB,USR_DSTBTN_SHOP_CLAS_IN,USR_DSTBTN_PRT_NB);
+
+INSERT INTO usr_dstbtn(
+usr_dfntn_id, usr_dfntn_wrk_ara_nm, usr_dstbtn_ky, usr_dstbtn_fclty_id, usr_dstbtn_fmly_cd, usr_dstbtn_prt_fmly_cd, usr_dstbtn_splr_nb, usr_dstbtn_shop_clas_in, usr_dstbtn_prt_nb, usr_dstbtn_crte_usr_id, usr_dstbtn_crte_ts, usr_dstbtn_updt_usr_id, usr_dstbtn_updt_ts)
+VALUES ('NMM561', 'DCC', 11, 'SP', '426A', 'G82014', '1000300', '8', '804976RR2A', 'X346339', current_timestamp, 'X346339', current_timestamp);
+
+
+ALTER TABLE USR_DSTBTN
+	ADD CONSTRAINT USR_DSTBTN_AK1 UNIQUE (USR_DFNTN_ID,USR_DFNTN_WRK_ARA_NM,USR_DSTBTN_FCLTY_ID,USR_DSTBTN_FMLY_CD,USR_DSTBTN_PRT_FMLY_CD,
+	USR_DSTBTN_SPLR_NB,USR_DSTBTN_SHOP_CLAS_IN,USR_DSTBTN_PRT_NB);
+
+ALTER TABLE USR_DSTBTN
+	ADD CONSTRAINT R_35 FOREIGN KEY (USR_DFNTN_ID,USR_DFNTN_WRK_ARA_NM) REFERENCES USR_DFNTN(USR_DFNTN_ID,USR_DFNTN_WRK_ARA_NM)
+		ON UPDATE RESTRICT
+		ON DELETE RESTRICT;
+		
+INSERT INTO usr_dfntn(
+usr_dfntn_id, usr_dfntn_wrk_ara_nm, usr_dfntn_dn_id, usr_dfntn_frst_nm, usr_dfntn_lst_nm, usr_dfntn_ttl_nm, usr_dfntn_crte_usr_id, usr_dfntn_crte_tmsatmp, usr_dfntn_updt_usr_id, usr_dfntn_updt_ts)
+VALUES ('NMM561', 'DCC', 'CN=Brady\, Trish,OU=Nissan Users,OU=US-Users,OU=USA,OU=NNA,DC=NMCorp,DC=Nissan,DC=Biz', 'TRISH', 'BRADY', 'MGR SUPPLY CHAIN MGMT', 'NMM561', current_timestamp, 'NMM561', current_timestamp);
+
+
+INSERT INTO usr_dstbtn(
+usr_dfntn_id, usr_dfntn_wrk_ara_nm, usr_dstbtn_ky, usr_dstbtn_fclty_id, usr_dstbtn_fmly_cd, usr_dstbtn_prt_fmly_cd, usr_dstbtn_splr_nb, usr_dstbtn_shop_clas_in, usr_dstbtn_prt_nb, usr_dstbtn_crte_usr_id, usr_dstbtn_crte_ts, usr_dstbtn_updt_usr_id, usr_dstbtn_updt_ts)
+VALUES ('NMM561', 'DCC', 11, 'SP', '426A', 'G82014', '1000300', '8', '804976RR2A', 'X346339', current_timestamp, 'X346339', current_timestamp);

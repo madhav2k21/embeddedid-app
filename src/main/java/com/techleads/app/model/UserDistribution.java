@@ -24,7 +24,7 @@ public class UserDistribution implements Serializable {
 	@Column(name = "usr_dstbtn_fclty_id")
 	private String userDistributionFacilityId;
 
-	@Column(name = "usr_dstbtn_fmly_cd")
+	@Column(name = "usr_dstbtn_prgrm_cd")
 	private String userDistributionFamiliyCode;
 
 	@Column(name = "usr_dstbtn_prt_fmly_cd")
