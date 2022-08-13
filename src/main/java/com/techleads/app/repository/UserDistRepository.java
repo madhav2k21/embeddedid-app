@@ -66,4 +66,18 @@ public class UserDistRepository {
 //
 //        }, params);
     }
-}
+
+
+    public int deleteUserDistributionByUserIdAndArea(String userId, String area) {
+        String QRY = "DELETE FROM USR_DSTBTN where USR_DFNTN_ID =:userId AND USR_DFNTN_WRK_ARA_NM =:area";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("area", area);
+        return namedParameterJdbcTemplate.update(QRY, params);
+
+    }
+
+
+
+    }

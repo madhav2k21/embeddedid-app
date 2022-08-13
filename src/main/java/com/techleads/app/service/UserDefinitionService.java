@@ -140,11 +140,12 @@ public class UserDefinitionService {
         UserDefinitionKey userDefinitionKey = new UserDefinitionKey(userDefinitionId, userDefinitionWorkAreaName);
 
         if (userDefinitionRepository.findById(userDefinitionKey).isPresent()) {
-            UserDistributionKey userDistributionKey = findUserDistribution(userDefinitionId, userDefinitionWorkAreaName);
+//            UserDistributionKey userDistributionKey = findUserDistribution(userDefinitionId, userDefinitionWorkAreaName);
+//            if (Objects.nonNull(userDistributionKey)) {
+//                userDistributionRepository.deleteById(userDistributionKey);
+//            }
             //delete child table reference
-            if (Objects.nonNull(userDistributionKey)) {
-                userDistributionRepository.deleteById(userDistributionKey);
-            }
+            userDistRepository.deleteUserDistributionByUserIdAndArea(userDefinitionId,userDefinitionWorkAreaName);
 
             userDefinitionRepository.deleteById(userDefinitionKey);
             return "User deleted successfully";

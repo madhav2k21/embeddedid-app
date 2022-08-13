@@ -46,9 +46,9 @@ public class UserDefinitionController {
     }
 
 
-    @GetMapping(value = {"/testqry"})
-    public Integer test(){
-        Integer integer = userDistRepository.maxUserDistKeyId();
+    @DeleteMapping(value = {"/test/{userId}/{area}"})
+    public Integer test(@PathVariable("userId") String userId, @PathVariable("area") String area){
+        Integer integer = userDistRepository.deleteUserDistributionByUserIdAndArea(userId,area);
         return integer;
     }
 
