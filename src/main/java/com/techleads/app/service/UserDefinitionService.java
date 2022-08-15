@@ -141,6 +141,27 @@ public class UserDefinitionService {
     public UserDefinition findByUserDefinitionKey(String userDefId, String userDefArea){
         UserDefinitionKey key=new UserDefinitionKey(userDefId, userDefArea);
         return userDefinitionRepository.findById(key)
+
+                .orElseThrow(()-> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+    }
+
+
+    public UserMaintenanceResponse findByUserDefinitionKey1(String userDefId, String userDefArea){
+        UserDefinitionKey key=new UserDefinitionKey(userDefId, userDefArea);
+        return userDefinitionRepository.findById(key).map(user->{
+
+                    UserMaintenanceResponse resp=new UserMaintenanceResponse();
+                    String userId=user.getUserDefinitionKey().getUserDefinitionId();
+                    String area=user.getUserDefinitionKey().getUserDefinitionWorkAreaName();
+                    resp.setUserId(userId);
+                    resp.setFirstName(user.getUserDefinitionFirstName());
+                    resp.setLastName(user.getUserDefinitionLastName());
+                    resp.setTitle(user.getUserDefinitionTitleName());
+                    resp.setArea(area);
+                    resp.setFacility(facilityId(userId,area));
+                    return resp;
+                })
+
                 .orElseThrow(()-> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
     }
 

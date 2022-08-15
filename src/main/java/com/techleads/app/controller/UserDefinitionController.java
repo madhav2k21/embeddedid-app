@@ -54,6 +54,14 @@ public class UserDefinitionController {
         return new ResponseEntity<>(userDef, HttpStatus.OK);
     }
 
+    @GetMapping(value = {"/users"})
+    public ResponseEntity<UserMaintenanceResponse> findUserDefintionByUserDefintionKey1(
+            @RequestParam("userId") String userId,
+            @RequestParam("areaName") String areaName) {
+        UserMaintenanceResponse response = userDefinitionService.findByUserDefinitionKey1(userId, areaName);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PutMapping(value = {"/user"})
     public ResponseEntity<UserDefinition> updateUserDefintionByUserDefintionKey(
             @RequestParam("userId") String userId,
