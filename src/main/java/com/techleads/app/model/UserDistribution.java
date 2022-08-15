@@ -1,16 +1,25 @@
 package com.techleads.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 //@Table(name = "usr_dstbtn", schema = "scm_app_epds")
 @Table(name = "usr_dstbtn")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDistribution implements Serializable {
 
 	/**
@@ -51,96 +60,19 @@ public class UserDistribution implements Serializable {
 	@Column(name = "usr_dstbtn_updt_ts")
 	private LocalDateTime userDistributionUpdatedTs;
 
-	public UserDistributionKey getUserDistributionKey() {
-		return userDistributionKey;
-	}
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumns({
+			@JoinColumn(name = "usr_dfntn_id", referencedColumnName = "usr_dfntn_id",
+					insertable = false, updatable = false),
+			@JoinColumn(name = "usr_dfntn_wrk_ara_nm", referencedColumnName = "usr_dfntn_wrk_ara_nm",
+					insertable = false, updatable = false)
+	})
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private UserDefinition userDefinition;
 
-	public void setUserDistributionKey(UserDistributionKey userDistributionKey) {
-		this.userDistributionKey = userDistributionKey;
-	}
 
-	public String getUserDistributionFacilityId() {
-		return userDistributionFacilityId;
-	}
 
-	public void setUserDistributionFacilityId(String userDistributionFacilityId) {
-		this.userDistributionFacilityId = userDistributionFacilityId;
-	}
 
-	public String getUserDistributionFamiliyCode() {
-		return userDistributionFamiliyCode;
-	}
-
-	public void setUserDistributionFamiliyCode(String userDistributionFamiliyCode) {
-		this.userDistributionFamiliyCode = userDistributionFamiliyCode;
-	}
-
-	public String getUserDistributionPartFamilyCode() {
-		return userDistributionPartFamilyCode;
-	}
-
-	public void setUserDistributionPartFamilyCode(String userDistributionPartFamilyCode) {
-		this.userDistributionPartFamilyCode = userDistributionPartFamilyCode;
-	}
-
-	public String getUserDistributionSupplierNumber() {
-		return userDistributionSupplierNumber;
-	}
-
-	public void setUserDistributionSupplierNumber(String userDistributionSupplierNumber) {
-		this.userDistributionSupplierNumber = userDistributionSupplierNumber;
-	}
-
-	public String getUserDistributionShopClassInd() {
-		return userDistributionShopClassInd;
-	}
-
-	public void setUserDistributionShopClassInd(String userDistributionShopClassInd) {
-		this.userDistributionShopClassInd = userDistributionShopClassInd;
-	}
-
-	public String getUserDistributionPartNumber() {
-		return userDistributionPartNumber;
-	}
-
-	public void setUserDistributionPartNumber(String userDistributionPartNumber) {
-		this.userDistributionPartNumber = userDistributionPartNumber;
-	}
-
-	public String getUserDistributionCreatedUserId() {
-		return userDistributionCreatedUserId;
-	}
-
-	public void setUserDistributionCreatedUserId(String userDistributionCreatedUserId) {
-		this.userDistributionCreatedUserId = userDistributionCreatedUserId;
-	}
-
-	public LocalDateTime getUserDistributionCreatedTs() {
-		return userDistributionCreatedTs;
-	}
-
-	public void setUserDistributionCreatedTs(LocalDateTime userDistributionCreatedTs) {
-		this.userDistributionCreatedTs = userDistributionCreatedTs;
-	}
-
-	public String getUserDistributionUpdatedUserId() {
-		return userDistributionUpdatedUserId;
-	}
-
-	public void setUserDistributionUpdatedUserId(String userDistributionUpdatedUserId) {
-		this.userDistributionUpdatedUserId = userDistributionUpdatedUserId;
-	}
-
-	public LocalDateTime getUserDistributionUpdatedTs() {
-		return userDistributionUpdatedTs;
-	}
-
-	public void setUserDistributionUpdatedTs(LocalDateTime userDistributionUpdatedTs) {
-		this.userDistributionUpdatedTs = userDistributionUpdatedTs;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 }

@@ -1,5 +1,6 @@
 package com.techleads.app.controller;
 
+import com.techleads.app.model.UserDefinition;
 import com.techleads.app.model.UserDefinitionDTO;
 import com.techleads.app.model.UserDistributionKey;
 import com.techleads.app.model.UserMaintenanceResponse;
@@ -24,25 +25,41 @@ public class UserDefinitionController {
     private UserDistRepository userDistRepository;
 
 
-    @PostMapping(value = {"/test"})
+    @PostMapping(value = {"/user/save"})
     public ResponseEntity<UserMaintenanceResponse> saveUser(@RequestBody UserDefinitionDTO userDTO){
         UserMaintenanceResponse response = userDefinitionService.addUser(userDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    @GetMapping(value = {"/test"})
+    @GetMapping(value = {"/user/listall"})
     public ResponseEntity<List<UserMaintenanceResponse>> findAllUserDefinition(){
         List<UserMaintenanceResponse> allUserDefinition = userDefinitionService.findAllUserDefinition();
         return new ResponseEntity<>(allUserDefinition, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = {"/test"})
+    @DeleteMapping(value = {"/user/delete"})
     public ResponseEntity<String> deleteUserDefintionByUserDefintionKey(
             @RequestParam("userId") String userId,
-            @RequestParam("area") String area) {
-        String result = userDefinitionService.deleteByUserDefinitionIdAndUserDefinitionWorkAreaName(userId, area);
+            @RequestParam("areaName") String areaName) {
+        String result = userDefinitionService.deleteByUserDefinitionIdAndUserDefinitionWorkAreaName(userId, areaName);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(value = {"/user"})
+    public ResponseEntity<UserDefinition> findUserDefintionByUserDefintionKey(
+            @RequestParam("userId") String userId,
+            @RequestParam("areaName") String areaName) {
+        UserDefinition userDef = userDefinitionService.findByUserDefinitionKey(userId, areaName);
+        return new ResponseEntity<>(userDef, HttpStatus.OK);
+    }
+
+    @PutMapping(value = {"/user"})
+    public ResponseEntity<UserDefinition> updateUserDefintionByUserDefintionKey(
+            @RequestParam("userId") String userId,
+            @RequestParam("areaName") String areaName, @RequestBody UserDefinition userDef) {
+        UserDefinition userDefinition = userDefinitionService.updateUserDefinitionKey(userId, areaName, userDef);
+        return new ResponseEntity<>(userDefinition, HttpStatus.OK);
     }
 
 

@@ -31,32 +31,4 @@ public class UserDistributionKey implements Serializable {
 	@Column(name = "usr_dstbtn_ky")
 	private Integer userDistributionKeyNum;
 
-//	public String getUserDefinitionId() {
-//		return userDefinitionId;
-//	}
-//
-//	public void setUserDefinitionId(String userDefinitionId) {
-//		this.userDefinitionId = userDefinitionId;
-//	}
-//
-//	public String getUserDefinitionWorkAreaName() {
-//		return userDefinitionWorkAreaName;
-//	}
-//
-//	public void setUserDefinitionWorkAreaName(String userDefinitionWorkAreaName) {
-//		this.userDefinitionWorkAreaName = userDefinitionWorkAreaName;
-//	}
-//
-//	public Integer getUserDistributionKey() {
-//		return userDistributionKey;
-//	}
-//
-//	public void setUserDistributionKey(Integer userDistributionKey) {
-//		this.userDistributionKey = userDistributionKey;
-//	}
-//
-//	public static long getSerialversionuid() {
-//		return serialVersionUID;
-//	}
-
 }
