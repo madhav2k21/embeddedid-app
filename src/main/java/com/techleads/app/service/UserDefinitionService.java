@@ -183,5 +183,34 @@ public class UserDefinitionService {
                 .orElseThrow(()-> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
     }
 
+    public UserMaintenanceResponse updateUserDefinitionKey1(String userDefId, String userDefArea, UserDefinition userdef){
+        UserDefinitionKey key=new UserDefinitionKey(userDefId, userDefArea);
+        return userDefinitionRepository.findById(key)
+                .map(user->{
+                    user.setUserDefinitionUpdatedUserId("admin");
+                    user.setUserDefinitionUpdatedTs(LocalDateTime.now());
+                    user.setUserDefinitionFirstName(userdef.getUserDefinitionFirstName());
+                    user.setUserDefinitionLastName(userdef.getUserDefinitionLastName());
+                    user.setUserDefinitionDnId(userdef.getUserDefinitionDnId());
+                    user.setUserDefinitionTitleName(userdef.getUserDefinitionTitleName());
+                    UserDefinition userDef = userDefinitionRepository.save(user);
+
+                    UserMaintenanceResponse resp=new UserMaintenanceResponse();
+                    String userId=userDef.getUserDefinitionKey().getUserDefinitionId();
+                    String area=userDef.getUserDefinitionKey().getUserDefinitionWorkAreaName();
+                    resp.setUserId(userId);
+                    resp.setFirstName(userDef.getUserDefinitionFirstName());
+                    resp.setLastName(userDef.getUserDefinitionLastName());
+                    resp.setTitle(userDef.getUserDefinitionTitleName());
+                    resp.setArea(area);
+                    resp.setFacility(facilityId(userId,area));
+                    return resp;
+
+                })
+
+                .orElseThrow(()-> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+    }
+
+
 
 }

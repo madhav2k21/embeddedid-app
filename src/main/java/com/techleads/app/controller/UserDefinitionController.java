@@ -71,6 +71,16 @@ public class UserDefinitionController {
     }
 
 
+    @PutMapping(value = {"/users"})
+    public ResponseEntity<UserMaintenanceResponse> updateUserDefintionByUserDefintionKey1(
+            @RequestParam("userId") String userId,
+            @RequestParam("areaName") String areaName, @RequestBody UserDefinition userDef) {
+        UserMaintenanceResponse response = userDefinitionService.updateUserDefinitionKey1(userId, areaName, userDef);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
     @DeleteMapping(value = {"/test/{userId}/{area}"})
     public Integer test(@PathVariable("userId") String userId, @PathVariable("area") String area){
         Integer integer = userDistRepository.deleteUserDistributionByUserIdAndArea(userId,area);
