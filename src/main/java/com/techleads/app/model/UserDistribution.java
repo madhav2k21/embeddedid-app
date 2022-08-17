@@ -60,16 +60,16 @@ public class UserDistribution implements Serializable {
 	@Column(name = "usr_dstbtn_updt_ts")
 	private LocalDateTime userDistributionUpdatedTs;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumns({
-			@JoinColumn(name = "usr_dfntn_id", referencedColumnName = "usr_dfntn_id",
-					insertable = false, updatable = false),
-			@JoinColumn(name = "usr_dfntn_wrk_ara_nm", referencedColumnName = "usr_dfntn_wrk_ara_nm",
-					insertable = false, updatable = false)
-	})
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
-	private UserDefinition userDefinition;
+//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+//	@JoinColumns({
+//			@JoinColumn(name = "usr_dfntn_id", referencedColumnName = "usr_dfntn_id",
+//					insertable = false, updatable = false),
+//			@JoinColumn(name = "usr_dfntn_wrk_ara_nm", referencedColumnName = "usr_dfntn_wrk_ara_nm",
+//					insertable = false, updatable = false)
+//	})
+//	@OnDelete(action = OnDeleteAction.CASCADE)
+//	@JsonIgnore
+//	private UserDefinition userDefinition;
 
 
 

@@ -47,9 +47,9 @@ public class UserDefinition implements Serializable {
     private LocalDateTime userDefinitionUpdatedTs;
 
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "userDefinition")
-    private Set<UserDistribution> userDistributions = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL,
+//            fetch = FetchType.LAZY,
+//            mappedBy = "userDefinition")
+//    private Set<UserDistribution> userDistributions = new HashSet<>();
 
 }

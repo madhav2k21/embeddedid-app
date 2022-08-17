@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDefinitionDTO {
+public class UserDefDTO {
 
     private String facility;
     private String userId;

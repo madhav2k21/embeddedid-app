@@ -1,11 +1,9 @@
 package com.techleads.app.controller;
 
 import com.techleads.app.model.UserDefinition;
-import com.techleads.app.model.UserDefinitionDTO;
-import com.techleads.app.model.UserDistributionKey;
+import com.techleads.app.model.UserDefDTO;
 import com.techleads.app.model.UserMaintenanceResponse;
 import com.techleads.app.repository.UserDistRepository;
-import com.techleads.app.repository.UserDistributionRepository;
 import com.techleads.app.service.UserDefinitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserDefinitionController {
@@ -26,7 +23,7 @@ public class UserDefinitionController {
 
 
     @PostMapping(value = {"/user/save"})
-    public ResponseEntity<UserMaintenanceResponse> saveUser(@RequestBody UserDefinitionDTO userDTO){
+    public ResponseEntity<UserMaintenanceResponse> saveUser(@RequestBody UserDefDTO userDTO){
         UserMaintenanceResponse response = userDefinitionService.addUser(userDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -76,6 +73,14 @@ public class UserDefinitionController {
             @RequestParam("userId") String userId,
             @RequestParam("areaName") String areaName, @RequestBody UserDefinition userDef) {
         UserMaintenanceResponse response = userDefinitionService.updateUserDefinitionKey1(userId, areaName, userDef);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping(value = {"/users2"})
+    public ResponseEntity<UserMaintenanceResponse> updateUserDefintionByUserDefintionKey2(
+            @RequestParam("userId") String userId,
+            @RequestParam("areaName") String areaName, @RequestBody UserDefDTO userDTO) {
+        UserMaintenanceResponse response = userDefinitionService.updateUserDefinitionKey2(userId, areaName, userDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
