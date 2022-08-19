@@ -29,6 +29,6 @@ public class UserDistributionKey implements Serializable {
 	private String userDefinitionWorkAreaName;
 
 	@Column(name = "usr_dstbtn_ky")
-	private Integer userDistributionKeyNum;
+	private Integer userDistributionKey;
 
 }

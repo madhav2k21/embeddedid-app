@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class UserDistributionResponse {
+public class UserDistributionDTO {
+
     private String packageEngineer;
     private String facility;
     private String userId;
@@ -21,12 +20,5 @@ public class UserDistributionResponse {
     private String supplierNum;
     private String partFamily;
     private String shopClass;
-
-    public UserDistributionResponse(String packageEngineer, String facility, String userId, String areaName, Integer usrDistKey) {
-        this.packageEngineer = packageEngineer;
-        this.facility = facility;
-        this.userId = userId;
-        this.areaName = areaName;
-        this.usrDistKey = usrDistKey;
-    }
+    private String partNumber;
 }

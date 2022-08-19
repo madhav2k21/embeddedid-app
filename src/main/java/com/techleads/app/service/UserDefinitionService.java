@@ -181,8 +181,10 @@ public class UserDefinitionService {
     }
 
     private String facilityId(String userDefinitionId, String userDefinitionWorkAreaName) {
-        Optional<String> facilityIdByUserIdAndArea = userDistributionRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
-        return facilityIdByUserIdAndArea.orElseGet(()-> "");
+        List<String> facilityIdByUserIdAndArea = userDistributionRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
+        return facilityIdByUserIdAndArea
+                .stream().findAny()
+                .orElseGet(()-> "");
 //        return userDistRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
 
     }

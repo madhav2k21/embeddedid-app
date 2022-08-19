@@ -67,27 +67,30 @@ public class UserDistRepository {
 
     public List<UserDistributionResponse> findAllUserDistributionJoinUserDefId() {
 
-        String QRY = "SELECT t1.USR_DFNTN_FRST_NM, t1.USR_DFNTN_LST_NM,  t2.USR_DFNTN_ID, t2.USR_DSTBTN_FCLTY_ID , t2.USR_DSTBTN_PRGRM_CD ,  t2.USR_DSTBTN_SPLR_NB , t2.USR_DSTBTN_PRT_FMLY_CD , t2.USR_DSTBTN_SHOP_CLAS_IN  FROM USR_DFNTN t1  INNER JOIN USR_DSTBTN t2  ON t1.USR_DFNTN_ID=t2.USR_DFNTN_ID";
+        String QRY = "SELECT t1.USR_DFNTN_FRST_NM, t1.USR_DFNTN_LST_NM, t2.USR_DFNTN_ID, t2.USR_DFNTN_WRK_ARA_NM, t2.USR_DSTBTN_KY, t2.USR_DSTBTN_FCLTY_ID, t2.USR_DSTBTN_PRGRM_CD ,  t2.USR_DSTBTN_SPLR_NB , t2.USR_DSTBTN_PRT_FMLY_CD , t2.USR_DSTBTN_SHOP_CLAS_IN  FROM USR_DFNTN t1  INNER JOIN USR_DSTBTN t2  ON t1.USR_DFNTN_ID=t2.USR_DFNTN_ID";
         Map<String, Object> params = new HashMap<>();
         List<UserDistributionResponse> userDisResponses = new ArrayList<>();
         namedParameterJdbcTemplate.query(QRY, params, new ResultSetExtractor<List<UserDistributionResponse>>() {
             @Override
             public List<UserDistributionResponse> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-                while (rs.next()) {
-                    UserDistributionResponse resp = new UserDistributionResponse();
-
-                    resp.setPackageEngineer(toCamelCase(rs.getString("USR_DFNTN_FRST_NM"))+" " +
-                                            toCamelCase(rs.getString("USR_DFNTN_LST_NM")));
-                    resp.setUserId(rs.getString("USR_DFNTN_ID"));
-                    resp.setFacility(rs.getString("USR_DSTBTN_FCLTY_ID"));
-                    resp.setProgramCode(rs.getString("USR_DSTBTN_PRGRM_CD"));
-                    resp.setSupplierNum(rs.getString("USR_DSTBTN_SPLR_NB"));
-                    resp.setPartFamily(rs.getString("USR_DSTBTN_PRT_FMLY_CD"));
-                    resp.setShopClass(rs.getString("USR_DSTBTN_SHOP_CLAS_IN"));
-                    userDisResponses.add(resp);
-                }
-                return userDisResponses;
+//                while (rs.next()) {
+//                    UserDistributionResponse resp = new UserDistributionResponse(5);
+//
+//                    resp.setPackageEngineer(toCamelCase(rs.getString("USR_DFNTN_FRST_NM"))+" " +
+//                                            toCamelCase(rs.getString("USR_DFNTN_LST_NM")));
+//                    resp.setUserId(rs.getString("USR_DFNTN_ID"));
+//                    resp.setAreaName(rs.getString("USR_DFNTN_WRK_ARA_NM"));
+//                    resp.setUsrDistKey(rs.getInt("USR_DSTBTN_KY"));
+//                    resp.setFacility(rs.getString("USR_DSTBTN_FCLTY_ID"));
+//                    resp.setProgramCode(rs.getString("USR_DSTBTN_PRGRM_CD"));
+//                    resp.setSupplierNum(rs.getString("USR_DSTBTN_SPLR_NB"));
+//                    resp.setPartFamily(rs.getString("USR_DSTBTN_PRT_FMLY_CD"));
+//                    resp.setShopClass(rs.getString("USR_DSTBTN_SHOP_CLAS_IN"));
+//                    userDisResponses.add(resp);
+//                }
+//                return userDisResponses;
+                return null;
             }
         });
         return userDisResponses;
