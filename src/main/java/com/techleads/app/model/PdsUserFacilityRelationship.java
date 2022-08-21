@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pds_usr_fclty_rlnshp", schema = "scm_app_epds")
+//@Table(name = "pds_usr_fclty_rlnshp", schema = "scm_app_epds")
+@Table(name = "pds_usr_fclty_rlnshp")
 public class PdsUserFacilityRelationship implements Serializable {
 
 	/**

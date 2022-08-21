@@ -2,71 +2,58 @@ package com.techleads.app.service;
 
 import com.techleads.app.exception.UserDefinitionNotFoundException;
 import com.techleads.app.model.*;
+import com.techleads.app.repository.PdsUserFacilityRelationshipRepository;
 import com.techleads.app.repository.UserDefinitionRepository;
 import com.techleads.app.repository.UserDistRepository;
 import com.techleads.app.repository.UserDistributionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+@Transactional
 @Service
 public class UserDefinitionService {
 
+    final String TEMP_USER_ID = "admin";
     private final UserDefinitionRepository userDefinitionRepository;
-
     private final UserDistributionRepository userDistributionRepository;
-
     private final UserDistRepository userDistRepository;
+    @Resource
+    private final PdsUserFacilityRelationshipRepository pdsUserFacilityRelationshipRepository;
 
-    public UserDefinitionService(UserDefinitionRepository userDefinitionRepository, UserDistributionRepository userDistributionRepository, UserDistRepository userDistRepository) {
+    public UserDefinitionService(UserDefinitionRepository userDefinitionRepository, UserDistributionRepository userDistributionRepository, UserDistRepository userDistRepository, PdsUserFacilityRelationshipRepository pdsUserFacilityRelationshipRepository) {
         this.userDefinitionRepository = userDefinitionRepository;
         this.userDistributionRepository = userDistributionRepository;
         this.userDistRepository = userDistRepository;
+        this.pdsUserFacilityRelationshipRepository = pdsUserFacilityRelationshipRepository;
     }
 
 
-    public UserMaintenanceResponse addUser(UserDefDTO userDTO) {
-        UserDefinitionKey key = new UserDefinitionKey(userDTO.getUserId(), userDTO.getArea());
+    public UserDefDTO addUser(UserDefDTO userDTO) {
+        saveToUserDefinition(userDTO);
+        saveToUserFacilityRelationship(userDTO);
 
-        if (userDefinitionRepository.findById(key).isPresent()) {
-            throw new UserDefinitionNotFoundException("User already exists " + key.getUserDefinitionId() + " and " + key.getUserDefinitionWorkAreaName());
-        }
-        final String TEMP_USER_ID = "admin";
-        userDTO.setCreatedUserId(TEMP_USER_ID);
-        userDTO.setUpdatedUserId(TEMP_USER_ID);
+        UserDefinitionKey key = new UserDefinitionKey();
 
-        UserDefinition user = new UserDefinition();
-        user.setUserDefinitionKey(key);
-        user.setUserDefinitionTitleName(userDTO.getTitle());
-        user.setUserDefinitionDnId("TODO");
-        user.setUserDefinitionFirstName(userDTO.getFirstName());
-        user.setUserDefinitionLastName(userDTO.getLastName());
-
-        user.setUserDefinitionCreatedUserId(userDTO.getCreatedUserId());
-        user.setUserDefinitionCreatedTs(LocalDateTime.now());
-        user.setUserDefinitionUpdatedUserId(userDTO.getUpdatedUserId());
-        user.setUserDefinitionUpdatedTs(LocalDateTime.now());
-
-        userDefinitionRepository.save(user);
-
-        UserDistribution userDist = prepareUserDistribution(userDTO, userDTO.getCreatedUserId());
-
-        userDistributionRepository.save(userDist);
+        key.setUserDefinitionId(userDTO.getUserId());
+        key.setUserDefinitionWorkAreaName(userDTO.getArea());
 
         return userDefinitionRepository.findById(key).map(this::convertEntityToResponse).orElse(null);
 
     }
 
-    public List<UserMaintenanceResponse> findAllUserDefinition() {
 
-        List<UserMaintenanceResponse> userMaintenanceResponses = new ArrayList<>();
+    public List<UserDefDTO> findAllUserDefinition() {
 
-        userDefinitionRepository.findAll().forEach(user -> userMaintenanceResponses.add(convertEntityToResponse(user)));
+        List<UserDefDTO> userDefDTOsList = new ArrayList<>();
 
-        return userMaintenanceResponses;
+        userDefinitionRepository.findAll().forEach(user -> userDefDTOsList.add(convertEntityToResponse(user)));
+
+        return userDefDTOsList;
     }
 
     public String deleteByUserDefinitionIdAndUserDefinitionWorkAreaName(String userDefinitionId, String userDefinitionWorkAreaName) {
@@ -74,7 +61,7 @@ public class UserDefinitionService {
 
         return userDefinitionRepository.findById(userDefinitionKey).map(user -> {
 
-            Optional<Integer> count = userDistributionRepository.deleteUserDistributionByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
+            pdsUserFacilityRelationshipRepository.deletePdsUserFacilityRelationshipByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
 
             userDefinitionRepository.deleteById(userDefinitionKey);
             return "User deleted successfully";
@@ -83,60 +70,19 @@ public class UserDefinitionService {
 
     }
 
-    public UserDefinition findByUserDefinitionKey(String userDefId, String userDefArea) {
-        UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
-        return userDefinitionRepository.findById(key)
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
-    }
 
-
-    public UserMaintenanceResponse findByUserDefinitionKey1(String userDefId, String userDefArea) {
+    public UserDefDTO findByUserDefinitionKey1(String userDefId, String userDefArea) {
         UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
 
-//        return userDefinitionRepository.findById(key).map(user-> convertEntityToResponse(user))
         return userDefinitionRepository.findById(key).map(this::convertEntityToResponse)
                 .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 
-    public UserDefinition updateUserDefinitionKey(String userDefId, String userDefArea, UserDefinition userdef) {
-        UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
-        return userDefinitionRepository.findById(key)
-                .map(user -> {
-                    user.setUserDefinitionUpdatedUserId("admin");
-                    user.setUserDefinitionUpdatedTs(LocalDateTime.now());
-                    user.setUserDefinitionFirstName(userdef.getUserDefinitionFirstName());
-                    user.setUserDefinitionLastName(userdef.getUserDefinitionLastName());
-                    user.setUserDefinitionDnId(userdef.getUserDefinitionDnId());
-                    user.setUserDefinitionTitleName(userdef.getUserDefinitionTitleName());
-                    return userDefinitionRepository.save(user);
-
-                })
-
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
-    }
-
-    public UserMaintenanceResponse updateUserDefinitionKey1(String userDefId, String userDefArea, UserDefinition userdef) {
-        UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
-        return userDefinitionRepository.findById(key)
-                .map(user -> {
-                    user.setUserDefinitionUpdatedUserId("admin");
-                    user.setUserDefinitionUpdatedTs(LocalDateTime.now());
-
-                    user.setUserDefinitionFirstName(userdef.getUserDefinitionFirstName());
-                    user.setUserDefinitionLastName(userdef.getUserDefinitionLastName());
-                    user.setUserDefinitionDnId(userdef.getUserDefinitionDnId());
-                    user.setUserDefinitionTitleName(userdef.getUserDefinitionTitleName());
-                    UserDefinition userDef = userDefinitionRepository.save(user);
-
-                    return convertEntityToResponse(userDef);
-                })
-
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
-    }
 
 
-    public UserMaintenanceResponse updateUserDefinitionKey2(String userDefId, String userDefArea, UserDefDTO userDTO) {
+
+    public UserDefDTO updateUserDefinitionKey(String userDefId, String userDefArea, UserDefDTO userDTO) {
         UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
         return userDefinitionRepository.findById(key)
                 .map(user -> {
@@ -149,6 +95,8 @@ public class UserDefinitionService {
 
                     user.setUserDefinitionUpdatedUserId("admin");
                     user.setUserDefinitionUpdatedTs(LocalDateTime.now());
+                    //TODO need to check if the UI gives existing facilityId else use below
+                    pdsUserFacilityRelationshipRepository.updatePdsUserFacilityRelationshipByUserIdAndArea(userDTO.getFacility(),userDefId,userDefArea);
 
                     UserDefinition userDef = userDefinitionRepository.save(user);
 
@@ -158,40 +106,64 @@ public class UserDefinitionService {
                 .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
     }
 
-    private UserDistribution prepareUserDistribution(UserDefDTO userDTO, String userId) {
+    /* Insert User Data to User Definition Table */
+    private void saveToUserDefinition(UserDefDTO userDTO) {
 
+        UserDefinitionKey key = new UserDefinitionKey(userDTO.getUserId(), userDTO.getArea());
 
-//        Integer key = userDistRepository.maxUserDistKeyId();
-        Optional<Integer> key = userDistributionRepository.findMaxUserDistributionKey();
-        Integer maxKey = key.isPresent() ? (key.get()+1) : 10;
+        // Check if User is already exists before save
+        if (userDefinitionRepository.findById(key).isPresent()) {
+            throw new UserDefinitionNotFoundException("User is already exists with " + key.getUserDefinitionId() + " and "
+                    + key.getUserDefinitionWorkAreaName());
+        }
 
+        UserDefinition user = new UserDefinition();
 
-//        key = Objects.isNull(key) ? 10 : key.get() + 1;
+        user.setUserDefinitionKey(key);
+        user.setUserDefinitionTitleName(userDTO.getTitle());
+        user.setUserDefinitionDnId("TODO");
+        user.setUserDefinitionFirstName(userDTO.getFirstName());
+        user.setUserDefinitionLastName(userDTO.getLastName());
 
-        UserDistributionKey uDisKey = new UserDistributionKey(userDTO.getUserId(), userDTO.getArea(), maxKey);
-        UserDistribution userDist = new UserDistribution();
-        userDist.setUserDistributionKey(uDisKey);
-        userDist.setUserDistributionFacilityId(userDTO.getFacility());
+        user.setUserDefinitionCreatedUserId(TEMP_USER_ID);
+        user.setUserDefinitionCreatedTs(LocalDateTime.now());
+        user.setUserDefinitionUpdatedUserId(TEMP_USER_ID);
+        user.setUserDefinitionUpdatedTs(LocalDateTime.now());
 
-        userDist.setUserDistributionCreatedUserId(userId);
-        userDist.setUserDistributionCreatedTs(LocalDateTime.now());
-        userDist.setUserDistributionUpdatedUserId(userId);
-        userDist.setUserDistributionUpdatedTs(LocalDateTime.now());
-        return userDist;
+        userDefinitionRepository.save(user);
+
+    }
+
+    /* Insert User Data to User Facility Relationship Table */
+    private void saveToUserFacilityRelationship(UserDefDTO userDTO) {
+
+        PdsUserFacilityRelationshipKey key = new PdsUserFacilityRelationshipKey(userDTO.getFacility(),
+                userDTO.getUserId(), userDTO.getArea());
+
+        PdsUserFacilityRelationship facilityRel = new PdsUserFacilityRelationship();
+        facilityRel.setPdsUserFacilityRelationshipKey(key);
+
+        facilityRel.setPdsUserFacilityCreatedUserId(TEMP_USER_ID);
+        facilityRel.setPdsUserFacilityCreatedTs(LocalDateTime.now());
+        facilityRel.setPdsUserFacilityUpdatedUserId(TEMP_USER_ID);
+        facilityRel.setPdsUserFacilityUpdatedTs(LocalDateTime.now());
+
+        pdsUserFacilityRelationshipRepository.save(facilityRel);
+
     }
 
     private String facilityId(String userDefinitionId, String userDefinitionWorkAreaName) {
-        List<String> facilityIdByUserIdAndArea = userDistributionRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
+        List<String> facilityIdByUserIdAndArea = pdsUserFacilityRelationshipRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
         return facilityIdByUserIdAndArea
                 .stream().findAny()
-                .orElseGet(()-> "");
-//        return userDistRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);
+                .orElse("");
 
     }
 
-    private UserMaintenanceResponse convertEntityToResponse(UserDefinition user) {
 
-        UserMaintenanceResponse response = new UserMaintenanceResponse();
+    private UserDefDTO convertEntityToResponse(UserDefinition user) {
+
+        UserDefDTO response = new UserDefDTO();
         response.setUserId(user.getUserDefinitionKey().getUserDefinitionId());
         response.setArea(user.getUserDefinitionKey().getUserDefinitionWorkAreaName());
         response.setTitle(user.getUserDefinitionTitleName());

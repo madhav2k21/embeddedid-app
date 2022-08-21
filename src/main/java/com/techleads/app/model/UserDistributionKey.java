@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Embeddable
 @AllArgsConstructor
@@ -29,6 +31,7 @@ public class UserDistributionKey implements Serializable {
 	private String userDefinitionWorkAreaName;
 
 	@Column(name = "usr_dstbtn_ky")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer userDistributionKey;
 
 }
