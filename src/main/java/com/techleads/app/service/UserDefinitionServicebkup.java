@@ -1,6 +1,6 @@
 package com.techleads.app.service;
 
-import com.techleads.app.exception.UserDefinitionNotFoundException;
+import com.techleads.app.exception.EntityException;
 import com.techleads.app.model.*;
 import com.techleads.app.repository.PdsUserFacilityRelationshipRepository;
 import com.techleads.app.repository.UserDefinitionRepository;
@@ -67,7 +67,7 @@ public class UserDefinitionServicebkup {
 
         // Check if User is already exists before save
         if (userDefinitionRepository.findById(key).isPresent()) {
-            throw new UserDefinitionNotFoundException("User is already exists with " + key.getUserDefinitionId() + " and "
+            throw new EntityException("User is already exists with " + key.getUserDefinitionId() + " and "
                     + key.getUserDefinitionWorkAreaName());
         }
 
@@ -125,14 +125,14 @@ public class UserDefinitionServicebkup {
             userDefinitionRepository.deleteById(userDefinitionKey);
             return "User deleted successfully";
         }).orElseThrow(
-                () -> new UserDefinitionNotFoundException("User not found with " + userDefinitionId + " and " + userDefinitionWorkAreaName));
+                () -> new EntityException("User not found with " + userDefinitionId + " and " + userDefinitionWorkAreaName));
 
     }
 
     public UserDefinition findByUserDefinitionKey(String userDefId, String userDefArea) {
         UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
         return userDefinitionRepository.findById(key)
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 
@@ -141,7 +141,7 @@ public class UserDefinitionServicebkup {
 
 //        return userDefinitionRepository.findById(key).map(user-> convertEntityToResponse(user))
         return userDefinitionRepository.findById(key).map(this::convertEntityToResponse)
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 
@@ -159,7 +159,7 @@ public class UserDefinitionServicebkup {
 
                 })
 
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
     public UserMaintenanceResponse updateUserDefinitionKey1(String userDefId, String userDefArea, UserDefinition userdef) {
@@ -178,7 +178,7 @@ public class UserDefinitionServicebkup {
                     return convertEntityToResponse(userDef);
                 })
 
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 
@@ -201,7 +201,7 @@ public class UserDefinitionServicebkup {
                     return convertEntityToResponse(userDef);
                 })
 
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 

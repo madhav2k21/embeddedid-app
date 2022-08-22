@@ -1,6 +1,6 @@
 package com.techleads.app.service;
 
-import com.techleads.app.exception.UserDefinitionNotFoundException;
+import com.techleads.app.exception.EntityException;
 import com.techleads.app.model.*;
 import com.techleads.app.repository.PdsUserFacilityRelationshipRepository;
 import com.techleads.app.repository.UserDefinitionRepository;
@@ -66,7 +66,7 @@ public class UserDefinitionService {
             userDefinitionRepository.deleteById(userDefinitionKey);
             return "User deleted successfully";
         }).orElseThrow(
-                () -> new UserDefinitionNotFoundException("User not found with " + userDefinitionId + " and " + userDefinitionWorkAreaName));
+                () -> new EntityException("User not found with " + userDefinitionId + " and " + userDefinitionWorkAreaName));
 
     }
 
@@ -75,7 +75,7 @@ public class UserDefinitionService {
         UserDefinitionKey key = new UserDefinitionKey(userDefId, userDefArea);
 
         return userDefinitionRepository.findById(key).map(this::convertEntityToResponse)
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
 
@@ -103,7 +103,7 @@ public class UserDefinitionService {
                     return convertEntityToResponse(userDef);
                 })
 
-                .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
+                .orElseThrow(() -> new EntityException("User not found with " + userDefId + " and " + userDefArea));
     }
 
     /* Insert User Data to User Definition Table */
@@ -113,7 +113,7 @@ public class UserDefinitionService {
 
         // Check if User is already exists before save
         if (userDefinitionRepository.findById(key).isPresent()) {
-            throw new UserDefinitionNotFoundException("User is already exists with " + key.getUserDefinitionId() + " and "
+            throw new EntityException("User is already exists with " + key.getUserDefinitionId() + " and "
                     + key.getUserDefinitionWorkAreaName());
         }
 

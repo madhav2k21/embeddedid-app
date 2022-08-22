@@ -1,5 +1,6 @@
 package com.techleads.app.service;
 
+import com.techleads.app.exception.EntityException;
 import com.techleads.app.model.PdsPrgrmMntnc;
 import com.techleads.app.model.PdsPrgrmMntncDTO;
 import com.techleads.app.repository.PdsPrgrmMntncRepository;
@@ -22,24 +23,60 @@ public class PdsPrgrmMntncService {
 
         List<PdsPrgrmMntncDTO> pdsPrgrmMntncDTOList = new ArrayList<>();
 
-        pdsPrgrmMntncList.forEach(entity-> pdsPrgrmMntncDTOList.add(convertPdsPrgrmMntncToEntityDTO(entity)));
+        pdsPrgrmMntncList.forEach(entity -> pdsPrgrmMntncDTOList.add(convertPdsPrgrmMntncToEntityDTO(entity)));
 
         return pdsPrgrmMntncDTOList;
     }
 
 
-    public PdsPrgrmMntncDTO savePdsPrgrmMntnc(PdsPrgrmMntncDTO dto){
+    public PdsPrgrmMntncDTO savePdsPrgrmMntnc(PdsPrgrmMntncDTO dto) {
 
-        PdsPrgrmMntnc entity = convertPdsPrgrmMntncDTOToEntity(dto);
+        try {
+            PdsPrgrmMntnc entity = convertPdsPrgrmMntncDTOToEntity(dto);
 
-        PdsPrgrmMntnc savedEntity = pdsProgramMaintenanceRepository.save(entity);
+            PdsPrgrmMntnc savedEntity = pdsProgramMaintenanceRepository.save(entity);
 
-        return convertPdsPrgrmMntncToEntityDTO(savedEntity);
+            return convertPdsPrgrmMntncToEntityDTO(savedEntity);
+        } catch (Exception e) {
+            throw new EntityException("Exception occurred in savePdsPrgrmMntnc()");
+        }
     }
 
-    private PdsPrgrmMntnc convertPdsPrgrmMntncDTOToEntity(PdsPrgrmMntncDTO dto){
 
-        PdsPrgrmMntnc entity=new PdsPrgrmMntnc();
+    public PdsPrgrmMntncDTO updatePdsPrgrmMntnc(PdsPrgrmMntncDTO dto, Integer prgrmMntncNumKey) {
+
+        return pdsProgramMaintenanceRepository.findById(prgrmMntncNumKey).map(entity -> {
+
+            entity.setProgmMntncItemNum(dto.getProgmMntncItemNum());
+            entity.setProgmMntncFacilityId(dto.getProgmMntncFacilityId());
+            entity.setProgmMntncTrackingNum(dto.getProgmMntncTrackingNum());
+            entity.setProgmMntncRivisionNum(dto.getProgmMntncRivisionNum());
+            entity.setProgmMntncCenterTypNum(dto.getProgmMntncCenterTypNum());
+            entity.setProgmMntncCenterRetunModeCd(dto.getProgmMntncCenterRetunModeCd());
+            entity.setProgmMntncValueNum(dto.getProgmMntncValueNum());
+
+            entity.setProgmMntncUpdtedUsrId(TEMP_USER_ID);
+            entity.setProgmMntncUpdtedTs(LocalDateTime.now());
+
+            PdsPrgrmMntnc updatedEntity = pdsProgramMaintenanceRepository.save(entity);
+
+            return convertPdsPrgrmMntncToEntityDTO(updatedEntity);
+        }).orElseThrow(() -> new EntityException("PdsProgramMaintence not found with" + prgrmMntncNumKey));
+
+
+    }
+
+
+    public PdsPrgrmMntncDTO findPdsPrgrmMntncById(Integer prgrmMntncNumKey) {
+        return pdsProgramMaintenanceRepository.findById(prgrmMntncNumKey).map(entity -> {
+            return convertPdsPrgrmMntncToEntityDTO(entity);
+        }).orElseThrow(() -> new EntityException("PdsProgramMaintence not found with" + prgrmMntncNumKey));
+
+    }
+
+    private PdsPrgrmMntnc convertPdsPrgrmMntncDTOToEntity(PdsPrgrmMntncDTO dto) {
+
+        PdsPrgrmMntnc entity = new PdsPrgrmMntnc();
 
         entity.setProgmMntncItemNumKey(dto.getProgmMntncItemNumKey());
         entity.setProgmMntncItemNum(dto.getProgmMntncItemNum());
@@ -58,8 +95,8 @@ public class PdsPrgrmMntncService {
         return entity;
     }
 
-    private PdsPrgrmMntncDTO convertPdsPrgrmMntncToEntityDTO(PdsPrgrmMntnc entity){
-        PdsPrgrmMntncDTO dto=new PdsPrgrmMntncDTO();
+    private PdsPrgrmMntncDTO convertPdsPrgrmMntncToEntityDTO(PdsPrgrmMntnc entity) {
+        PdsPrgrmMntncDTO dto = new PdsPrgrmMntncDTO();
         dto.setProgmMntncItemNumKey(entity.getProgmMntncItemNumKey());
         dto.setProgmMntncItemNum(entity.getProgmMntncItemNum());
         dto.setProgmMntncFacilityId(entity.getProgmMntncFacilityId());
