@@ -15,15 +15,15 @@ import java.util.Optional;
 public interface PdsUserFacilityRelationshipRepository
 		extends JpaRepository<PdsUserFacilityRelationship, PdsUserFacilityRelationshipKey> {
 
-	@Query(value ="SELECT PDS_USR_FCLTY_ID FROM PDS_USR_FCLTY_RLNSHP WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area",nativeQuery=true)
+	@Query(value ="SELECT PDS_USR_FCLTY_ID FROM scm_app_epds.PDS_USR_FCLTY_RLNSHP WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area",nativeQuery=true)
 	List<String> findFacilityIdByUserIdAndArea(@Param("userId") String userId, @Param("area") String area);
 
 	@Modifying
-	@Query(value = "DELETE FROM PDS_USR_FCLTY_RLNSHP WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area", nativeQuery=true)
+	@Query(value = "DELETE FROM scm_app_epds.PDS_USR_FCLTY_RLNSHP WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area", nativeQuery=true)
 	Optional<Integer> deletePdsUserFacilityRelationshipByUserIdAndArea(@Param("userId") String userId, @Param("area") String area);
 
 	@Modifying
-	@Query(value = "UPDATE PDS_USR_FCLTY_RLNSHP SET PDS_USR_FCLTY_ID =:facilityId, PDS_USR_FCLTY_UPDT_TS = current_timestamp  WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area", nativeQuery=true)
+	@Query(value = "UPDATE scm_app_epds.PDS_USR_FCLTY_RLNSHP SET PDS_USR_FCLTY_ID =:facilityId, PDS_USR_FCLTY_UPDT_TS = current_timestamp  WHERE PDS_USR_FCLTY_USR_DFNTN_ID =:userId AND PDS_USR_FCLTY_WRK_ARA_NM =:area", nativeQuery=true)
 	Optional<Integer> updatePdsUserFacilityRelationshipByUserIdAndArea(
 			@Param("facilityId") String facilityId,
 			@Param("userId") String userId, @Param("area") String area);

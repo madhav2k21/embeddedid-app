@@ -204,27 +204,6 @@ public class UserDefinitionServicebkup {
                 .orElseThrow(() -> new UserDefinitionNotFoundException("User not found with " + userDefId + " and " + userDefArea));
     }
 
-    private UserDistribution prepareUserDistribution(UserDefDTO userDTO, String userId) {
-
-
-//        Integer key = userDistRepository.maxUserDistKeyId();
-        Optional<Integer> key = userDistributionRepository.findMaxUserDistributionKey();
-        Integer maxKey = key.isPresent() ? (key.get()+1) : 10;
-
-
-//        key = Objects.isNull(key) ? 10 : key.get() + 1;
-
-        UserDistributionKey uDisKey = new UserDistributionKey(userDTO.getUserId(), userDTO.getArea(), maxKey);
-        UserDistribution userDist = new UserDistribution();
-        userDist.setUserDistributionKey(uDisKey);
-        userDist.setUserDistributionFacilityId(userDTO.getFacility());
-
-        userDist.setUserDistributionCreatedUserId(userId);
-        userDist.setUserDistributionCreatedTs(LocalDateTime.now());
-        userDist.setUserDistributionUpdatedUserId(userId);
-        userDist.setUserDistributionUpdatedTs(LocalDateTime.now());
-        return userDist;
-    }
 
     private String facilityId(String userDefinitionId, String userDefinitionWorkAreaName) {
         List<String> facilityIdByUserIdAndArea = userDistributionRepository.findFacilityIdByUserIdAndArea(userDefinitionId, userDefinitionWorkAreaName);

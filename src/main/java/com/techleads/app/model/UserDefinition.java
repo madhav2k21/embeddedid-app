@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 //@Table(name = "usr_dstbtn", schema = "scm_app_epds")
-@Table(name = "usr_dfntn")
+@Table(name = "usr_dfntn", schema = "scm_app_epds")
 @Getter
 @Setter
 @AllArgsConstructor

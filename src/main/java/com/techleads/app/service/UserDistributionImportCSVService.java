@@ -5,6 +5,7 @@ import com.techleads.app.model.UserDistributionDTO;
 import com.techleads.app.model.UserDistributionKey;
 import com.techleads.app.repository.UserDistributionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,22 +19,26 @@ import java.util.Optional;
 @Service
 public class UserDistributionImportCSVService {
     private final String TEMP_USER_ID = "admin";
+    private final String userDistributionKey_seq="nextval('scm_app_epds.userDistributionKey_seq')";
     @Autowired
     private UserDistributionRepository userDistributionRepository;
     public void readCSVAndSaveUserDistribution(MultipartFile file) {
         try {
             List<UserDistributionDTO> userDistributionDTOList = UserDistributionCSVHelper.csvToUserDistributionDTO(file.getInputStream());
-//            List<UserDistribution> userDistributionList=new ArrayList<>();
+            List<UserDistribution> userDistributionList=new ArrayList<>();
             userDistributionDTOList.forEach(dto->{
                 UserDistribution usrDis=new UserDistribution();
 
-                UserDistributionKey key=new UserDistributionKey();
+//                UserDistributionKey key=new UserDistributionKey();
                 //primary key for UserDistribution starts
-                key.setUserDefinitionId(dto.getUserId());
-                key.setUserDefinitionWorkAreaName(dto.getAreaName());
-                key.setUserDistributionKey(findMaxUserDistKey());
-                usrDis.setUserDistributionKey(key);
+//                key.setUserDefinitionId(dto.getUserId());
+//                key.setUserDefinitionWorkAreaName(dto.getAreaName());
+//                key.setUserDistributionKey(findMaxUserDistKey());
+//                usrDis.setUserDistributionKey(key);
                 //primary key UserDistribution ends
+
+                usrDis.setUserDefinitionId(dto.getUserId());
+                usrDis.setUserDefinitionWorkAreaName(dto.getAreaName());
 
                 usrDis.setUserDistributionFacilityId(dto.getFacility());
                 usrDis.setUserDistributionPgrmCode(dto.getProgramCode());
@@ -46,11 +51,11 @@ public class UserDistributionImportCSVService {
                 usrDis.setUserDistributionCreatedTs(LocalDateTime.now());
                 usrDis.setUserDistributionUpdatedUserId(TEMP_USER_ID);
                 usrDis.setUserDistributionUpdatedTs(LocalDateTime.now());
-                userDistributionRepository.save(usrDis);
-//                userDistributionList.add(usrDis);
+//                userDistributionRepository.save(usrDis);
+                userDistributionList.add(usrDis);
             });
 
-//            userDistributionRepository.saveAll(userDistributionList);
+            userDistributionRepository.saveAll(userDistributionList);
         } catch (IOException e) {
             throw new RuntimeException("failed to store csv data: " + e.getMessage());
         }
@@ -60,4 +65,10 @@ public class UserDistributionImportCSVService {
         Optional<Integer> key = userDistributionRepository.findMaxUserDistributionKey();
         return key.isPresent() ? (key.get()+1) : 10;
     }
+
+//    public UserDistribution testExample(){
+//        UserDistribution ud=new UserDistribution();
+//        Example<UserDistribution> example = Example.of(ud);
+//        userDistributionRepository.findBy(example);
+//    }
 }

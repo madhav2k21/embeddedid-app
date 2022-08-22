@@ -25,7 +25,7 @@ public class UserDistRepository {
 
     public Integer maxUserDistKeyId() {
 //        Object[] params={};
-        String QRY = "SELECT max(USR_DSTBTN_KY) as USR_DSTBTN_KY FROM USR_DSTBTN ";
+        String QRY = "SELECT max(USR_DSTBTN_KY) as scm_app_epds.USR_DSTBTN_KY FROM USR_DSTBTN ";
         Map<String, Object> params = new HashMap<>();
         return namedParameterJdbcTemplate.query(QRY, params, (rs) -> {
 
@@ -40,7 +40,7 @@ public class UserDistRepository {
 
 
     public String findFacilityIdByUserIdAndArea(String userId, String area) {
-        String QRY = "SELECT  USR_DSTBTN_FCLTY_ID  FROM USR_DSTBTN  WHERE  USR_DFNTN_ID =:userId  AND  USR_DFNTN_WRK_ARA_NM =:area";
+        String QRY = "SELECT  USR_DSTBTN_FCLTY_ID  FROM scm_app_epds.USR_DSTBTN  WHERE  USR_DFNTN_ID =:userId  AND  USR_DFNTN_WRK_ARA_NM =:area";
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
@@ -56,7 +56,7 @@ public class UserDistRepository {
 
 
     public int deleteUserDistributionByUserIdAndArea(String userId, String area) {
-        String QRY = "DELETE FROM USR_DSTBTN where USR_DFNTN_ID =:userId AND USR_DFNTN_WRK_ARA_NM =:area";
+        String QRY = "DELETE FROM scm_app_epds.USR_DSTBTN where USR_DFNTN_ID =:userId AND USR_DFNTN_WRK_ARA_NM =:area";
 
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
@@ -67,7 +67,7 @@ public class UserDistRepository {
 
     public List<UserDistributionResponse> findAllUserDistributionJoinUserDefId() {
 
-        String QRY = "SELECT t1.USR_DFNTN_FRST_NM, t1.USR_DFNTN_LST_NM, t2.USR_DFNTN_ID, t2.USR_DFNTN_WRK_ARA_NM, t2.USR_DSTBTN_KY, t2.USR_DSTBTN_FCLTY_ID, t2.USR_DSTBTN_PRGRM_CD ,  t2.USR_DSTBTN_SPLR_NB , t2.USR_DSTBTN_PRT_FMLY_CD , t2.USR_DSTBTN_SHOP_CLAS_IN  FROM USR_DFNTN t1  INNER JOIN USR_DSTBTN t2  ON t1.USR_DFNTN_ID=t2.USR_DFNTN_ID";
+        String QRY = "SELECT t1.USR_DFNTN_FRST_NM, t1.USR_DFNTN_LST_NM, t2.USR_DFNTN_ID, t2.USR_DFNTN_WRK_ARA_NM, t2.USR_DSTBTN_KY, t2.USR_DSTBTN_FCLTY_ID, t2.USR_DSTBTN_PRGRM_CD ,  t2.USR_DSTBTN_SPLR_NB , t2.USR_DSTBTN_PRT_FMLY_CD , t2.USR_DSTBTN_SHOP_CLAS_IN  FROM scm_app_epds.USR_DFNTN t1  INNER JOIN scm_app_epds.USR_DSTBTN t2  ON t1.USR_DFNTN_ID=t2.USR_DFNTN_ID";
         Map<String, Object> params = new HashMap<>();
         List<UserDistributionResponse> userDisResponses = new ArrayList<>();
         namedParameterJdbcTemplate.query(QRY, params, new ResultSetExtractor<List<UserDistributionResponse>>() {

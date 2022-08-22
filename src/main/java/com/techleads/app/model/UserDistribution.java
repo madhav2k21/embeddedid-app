@@ -15,20 +15,35 @@ import javax.persistence.*;
 
 @Entity
 //@Table(name = "usr_dstbtn", schema = "scm_app_epds")
-@Table(name = "usr_dstbtn")
+@Table(name = "usr_dstbtn",schema = "scm_app_epds")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(UserDistributionKey.class)
 public class UserDistribution implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private UserDistributionKey userDistributionKey;
+//	@EmbeddedId
+//	private UserDistributionKey userDistributionKey;
+
+
+	@Id
+	@Column(name = "usr_dfntn_id")
+	private String userDefinitionId;
+
+	@Id
+	@Column(name = "usr_dfntn_wrk_ara_nm")
+	private String userDefinitionWorkAreaName;
+
+	@Id
+//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "mySeqGen", sequenceName = "mySeq")
+	@GeneratedValue(generator = "mySeqGen")
+	@Column(name = "usr_dstbtn_ky")
+	private Integer userDistributionKey;
+
 
 	@Column(name = "usr_dstbtn_fclty_id")
 	private String userDistributionFacilityId;
