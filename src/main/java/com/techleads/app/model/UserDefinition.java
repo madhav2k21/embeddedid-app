@@ -46,10 +46,4 @@ public class UserDefinition implements Serializable {
     @Column(name = "usr_dfntn_updt_ts")
     private LocalDateTime userDefinitionUpdatedTs;
 
-
-//    @OneToMany(cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY,
-//            mappedBy = "userDefinition")
-//    private Set<UserDistribution> userDistributions = new HashSet<>();
-
 }

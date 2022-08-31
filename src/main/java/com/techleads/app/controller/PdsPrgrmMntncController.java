@@ -51,9 +51,18 @@ public class PdsPrgrmMntncController {
     }
 
     @GetMapping(value = {"/prgrmmntnc"})
-    public ResponseEntity<PdsPrgrmMntncDTO> updatePdsPrgrmMntnc(
+    public ResponseEntity<PdsPrgrmMntncDTO> findPdsPrgrmMntncById(
             @RequestParam("prgrmMntncNumKey") Integer prgrmMntncNumKey) {
         PdsPrgrmMntncDTO response = pdsPrgrmMntncService.findPdsPrgrmMntncById(prgrmMntncNumKey);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = {"/prgrmmntnc/delete"})
+    public ResponseEntity<String> deletePdsPrgrmMntncById(
+            @RequestParam("prgrmMntncNumKey") Integer prgrmMntncNumKey) {
+        String response = pdsPrgrmMntncService.deletePdsPrgrmMntncById(prgrmMntncNumKey);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 

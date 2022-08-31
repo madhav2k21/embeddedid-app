@@ -4,17 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "pds_prgrm_mntnc",schema = "scm_app_epds")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "pds_prgrm_mntnc",schema = "scm_app_epds")
 public class PdsPrgrmMntnc implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +26,6 @@ public class PdsPrgrmMntnc implements Serializable {
 
 	@Column(name = "prgrm_mntnc_itm_nb")
 	private String progmMntncItemNum;
-
 
 	@Column(name = "prgrm_mntnc_fclty_id")
 	private String progmMntncFacilityId;
@@ -52,7 +50,6 @@ public class PdsPrgrmMntnc implements Serializable {
 
 	@Column(name = "prgrm_mntnc_crte_ts")
 	private LocalDateTime progmMntncCrtedTs;
-
 
 	@Column(name = "prgrm_mntnc_updt_usr_id")
 	private String progmMntncUpdtedUsrId;

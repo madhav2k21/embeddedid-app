@@ -70,7 +70,15 @@ public class PdsPrgrmMntncService {
     public PdsPrgrmMntncDTO findPdsPrgrmMntncById(Integer prgrmMntncNumKey) {
         return pdsProgramMaintenanceRepository.findById(prgrmMntncNumKey).map(entity -> {
             return convertPdsPrgrmMntncToEntityDTO(entity);
-        }).orElseThrow(() -> new EntityException("PdsProgramMaintence not found with" + prgrmMntncNumKey));
+        }).orElseThrow(() -> new EntityException("PdsProgramMaintence not found with " + prgrmMntncNumKey));
+
+    }
+
+
+    public String deletePdsPrgrmMntncById(Integer prgrmMntncNumKey) {
+        return pdsProgramMaintenanceRepository.findById(prgrmMntncNumKey).map(entity -> {
+            return "Program Maintenance deleted successfully";
+        }).orElseThrow(() -> new EntityException("PdsProgramMaintence not found with " + prgrmMntncNumKey));
 
     }
 
