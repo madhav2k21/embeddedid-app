@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class PdsReviewTrackingService {
@@ -17,14 +18,28 @@ public class PdsReviewTrackingService {
     private PdsReviewTrackingRepository  pdsReviewTrackingRepository;
 
     public PdsReviewTrackingDTO savePdsReviewTracking(PdsReviewTrackingDTO dto){
+
+
         PdsReviewTrackingKey key = getPdsReviewTrackingKey(dto);
 
         PdsReviewTracking entity = convertDtoTOEntity(dto, key);
+
 
         PdsReviewTracking savedEntity = pdsReviewTrackingRepository.save(entity);
 
         PdsReviewTrackingDTO reponseDTO = convertEntityToDTO(savedEntity);
         return reponseDTO;
+
+    }
+
+    private Integer maxRvwTrckngRspnsNum(PdsReviewTrackingDTO dto){
+        Optional<Integer> maxRvwTrckngRspnsNum = pdsReviewTrackingRepository.findMaxRvwTrckngRspnsNum(
+                dto.getPdsTrackingKey(),
+                dto.getPdsVersionNumber(),
+                dto.getPdsReviewTrackingTypeName(),
+                dto.getPdsReviewTrackingReviewerId()
+        );
+        return maxRvwTrckngRspnsNum.isPresent() ? (maxRvwTrckngRspnsNum.get()+1) : 1;
 
     }
 
@@ -82,11 +97,15 @@ public class PdsReviewTrackingService {
     private PdsReviewTrackingKey getPdsReviewTrackingKey(PdsReviewTrackingDTO dto) {
         PdsReviewTrackingKey key=new PdsReviewTrackingKey();
 
-        key.setPdsReviewTrackingReviewerId(dto.getPdsReviewTrackingReviewerId());
-        key.setPdsReviewTrackingResponseNumber(dto.getPdsReviewTrackingResponseNumber());
+        key.setPdsTrackingKey(dto.getPdsTrackingKey());
         key.setPdsVersionNumber(dto.getPdsVersionNumber());
         key.setPdsReviewTrackingTypeName(dto.getPdsReviewTrackingTypeName());
-        key.setPdsTrackingKey(dto.getPdsTrackingKey());
+
+        key.setPdsReviewTrackingReviewerId(dto.getPdsReviewTrackingReviewerId());
+        key.setPdsReviewTrackingResponseNumber(maxRvwTrckngRspnsNum(dto));
+
+
+
         return key;
     }
 
