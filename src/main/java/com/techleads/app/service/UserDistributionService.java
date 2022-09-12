@@ -27,7 +27,7 @@ public class UserDistributionService {
 
         userDisReponse.forEach(user -> {
             if (Objects.nonNull(user.getPackageEngineer()) && user.getPackageEngineer().length() > 0) {
-                String[] name = user.getPackageEngineer().split(" ");
+                String[] name = user.getPackageEngineer().split("\\s+");
                 if (name.length == 2) {
                     String firstName = toCamelCase(name[0]);
                     String lastName = toCamelCase(name[1]);

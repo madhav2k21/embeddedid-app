@@ -1,5 +1,7 @@
 package com.techleads.app.repository;
 
+import com.techleads.app.model.ApproverNames;
+import com.techleads.app.model.DelinkingReqDTO;
 import com.techleads.app.model.PdsReviewTracking;
 import com.techleads.app.model.PdsReviewTrackingKey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -57,4 +60,34 @@ public interface PdsReviewTrackingRepository extends JpaRepository<PdsReviewTrac
             @Param("typNm") String typNm,
             @Param("rvwrId") String rvwrId
     );
+
+    @Query("select distinct new com.techleads.app.model.ApproverNames (CONCAT(t1.userDefinitionFirstName,' ',t1.userDefinitionLastName) as fullName," +
+            " t2.userDistributionKey.userDefinitionWorkAreaName as areaName, " +
+            "t2.userDistributionKey.userDefinitionId as userId, " +
+            "t3.pdsReviewTrackingStatusName as statusName, " +
+            "t3.pdsReviewUpdateUpdatedTs as updtedTs) " +
+            "FROM UserDefinition AS t1  INNER JOIN UserDistribution AS t2  ON  " +
+            "(t1.userDefinitionKey.userDefinitionWorkAreaName = t2.userDistributionKey.userDefinitionWorkAreaName) " +
+            "INNER JOIN PdsReviewTracking AS t3  ON  (t2.userDistributionKey.userDefinitionId = t3.pdsReviewTrackingKey.pdsReviewTrackingReviewerId) " +
+            "where t2.userDistributionKey.userDefinitionWorkAreaName = (:areaName) and " +
+            "t2.userDistributionFacilityId = (:facilityId) " +
+            "ORDER BY t3.pdsReviewUpdateUpdatedTs DESC")
+    List<ApproverNames> findAllApproverNames(
+            @Param("areaName") String areaName,
+            @Param("facilityId") String facilityId
+    );
+    @Query("select distinct new com.techleads.app.model.DelinkingReqDTO (" +
+            " pt.pdsTrackingItemNumber as partNumber, pi.pdsItemDescription as partDescription," +
+            " pdsrv.pdsReviewTrackingStatusName as approveOrReject, " +
+            "concat(usrdef.userDefinitionFirstName, ' ', usrdef.userDefinitionLastName) AS approver, " +
+            "usrdef.userDefinitionUpdatedTs as updtedTs) " +
+            "FROM PdsTracking  pt, PdsItem pi, PdsCommentTracking pc, Pds pds, PdsReviewTracking  pdsrv, UserDefinition usrdef " +
+            "WHERE pt.pdsTrackingKey = pi.pdsItemKey.pdsTrackingKey " +
+            "AND pt.pdsTrackingKey = pc.pdsCommentTrackingKey.pdsTrackingKey " +
+            "AND pds.pdsKey.pdsTrackingKey = pt.pdsTrackingKey " +
+            "AND pdsrv.pdsReviewTrackingKey.pdsTrackingKey = pds.pdsKey.pdsTrackingKey " +
+            "AND pdsrv.pdsReviewTrackingKey.pdsVersionNumber = pds.pdsKey.pdsVersionNumber " +
+            "AND pdsrv.pdsReviewTrackingKey.pdsReviewTrackingReviewerId = usrdef.userDefinitionKey.userDefinitionId")
+
+    List<DelinkingReqDTO> findAllDelinkingRequest();
 }
